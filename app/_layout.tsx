@@ -10,9 +10,14 @@ import { useEffect } from "react";
 import "react-native-reanimated";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
+import { createActor } from "xstate";
+import taskMachine from "./_machines/taskMachine";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
+export const globalTaskActor = createActor(taskMachine);
+globalTaskActor.start();
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();

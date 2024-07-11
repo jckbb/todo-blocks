@@ -14,9 +14,10 @@ type TodoGroup = {
 
 interface Props {
   groups: TodoGroup[];
+  listHeader: () => React.JSX.Element;
 }
 
-const GroupList = ({ groups }: Props) => {
+const GroupList = ({ groups, listHeader }: Props) => {
   const renderGroupItem = ({
     item,
     section: { color },
@@ -71,6 +72,7 @@ const GroupList = ({ groups }: Props) => {
       style={styles.groupSectionList}
       renderSectionHeader={renderGroupHeader}
       renderSectionFooter={renderGroupFooter}
+      ListHeaderComponent={listHeader}
       sections={groups}
       renderItem={renderGroupItem}
     />

@@ -1,7 +1,9 @@
 import React from "react";
-import { StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import GroupList from "./components/GroupList";
+import { Link } from "expo-router";
+import GroupListHeader from "./_components/GroupList/GroupListHeader";
+import GroupList from "./_components/GroupList";
 
 const styles = StyleSheet.create({
   mainContainer: { flex: 1 },
@@ -24,12 +26,14 @@ const dummyGroups = [
   },
 ];
 
-const Todo = () => {
+const Home = () => {
+  const renderListHeader = () => <GroupListHeader />;
+
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <GroupList groups={dummyGroups} />
+      <GroupList listHeader={renderListHeader} groups={dummyGroups} />
     </SafeAreaView>
   );
 };
 
-export default Todo;
+export default Home;

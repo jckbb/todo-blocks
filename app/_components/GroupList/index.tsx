@@ -1,16 +1,7 @@
 import React from "react";
 import { View, Text, SectionList } from "react-native";
 import styles from "./styles";
-
-type Task = {
-  task: string;
-};
-
-type TodoGroup = {
-  title: string;
-  data: Task[];
-  color?: string;
-};
+import { Task, TodoGroup } from "@/app/_machines/taskMachine";
 
 interface Props {
   groups: TodoGroup[];
@@ -32,7 +23,7 @@ const GroupList = ({ groups, listHeader }: Props) => {
       ]}
     >
       <View style={styles.item}>
-        <Text>{item.task}</Text>
+        <Text>{item.description}</Text>
       </View>
     </View>
   );

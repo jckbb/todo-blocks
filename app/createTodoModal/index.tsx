@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { TextInput, TouchableOpacity, View, Text } from "react-native";
 import SegmentedList, { Option } from "../_components/SegmentedList";
 import { useRouter } from "expo-router";
+import { globalTaskActor } from "../_layout";
 
 const dummyGroupNames: Option[] = [
   { label: "other" },
@@ -31,6 +32,10 @@ const CreateTodoModal = () => {
             right: 0,
           }}
           onPress={() => {
+            globalTaskActor.send({
+              type: "addTask",
+              task: { group: selectedGroup, description: taskDescription },
+            });
             router.dismiss();
           }}
         >

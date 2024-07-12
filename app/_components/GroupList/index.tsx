@@ -29,7 +29,7 @@ const GroupList = ({ groups, listHeader }: Props) => {
   );
 
   const renderGroupHeader = ({
-    section: { title, color },
+    section: { name: title, color },
   }: {
     section: TodoGroup;
   }) => (

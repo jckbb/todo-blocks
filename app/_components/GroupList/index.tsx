@@ -1,31 +1,54 @@
 import React from "react";
-import { View, Text, SectionList } from "react-native";
+import {
+  View,
+  Text,
+  SectionList,
+  TouchableWithoutFeedback,
+} from "react-native";
 import styles from "./styles";
 import { Task, TodoGroup } from "@/app/_machines/taskMachine";
 
 interface Props {
   groups: TodoGroup[];
   listHeader: () => React.JSX.Element;
+  onToggleDoneTask: ({
+    taskIndex,
+    groupName,
+  }: {
+    taskIndex: number;
+    groupName: TodoGroup["name"];
+  }) => void;
 }
 
-const GroupList = ({ groups, listHeader }: Props) => {
+const GroupList = ({ groups, listHeader, onToggleDoneTask }: Props) => {
   const renderGroupItem = ({
     item,
-    section: { color },
+    index,
+    section: { name, color },
   }: {
     item: Task;
+    index: number;
     section: TodoGroup;
   }) => (
-    <View
-      style={[
-        styles.groupItem,
-        color !== undefined && { backgroundColor: color },
-      ]}
+    <TouchableWithoutFeedback
+      onPress={() => {
+        onToggleDoneTask({ groupName: name, taskIndex: index });
+      }}
     >
-      <View style={styles.item}>
-        <Text>{item.description}</Text>
+      <View
+        style={[
+          styles.groupItem,
+          color !== undefined && { backgroundColor: color },
+        ]}
+      >
+        <View style={styles.item}>
+          <View style={styles.itemStatus}>
+            {item.done && <View style={styles.itemStatusDone} />}
+          </View>
+          <Text style={styles.taskDescription}>{item.description}</Text>
+        </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 
   const renderGroupHeader = ({
@@ -66,6 +89,7 @@ const GroupList = ({ groups, listHeader }: Props) => {
       ListHeaderComponent={listHeader}
       sections={groups}
       renderItem={renderGroupItem}
+      keyExtractor={(_, index) => index.toString()}
     />
   );
 };

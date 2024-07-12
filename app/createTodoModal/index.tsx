@@ -1,67 +1,55 @@
 import React, { useState } from "react";
-import { TextInput, TouchableOpacity, View, Text } from "react-native";
-import SegmentedList, { Option } from "../_components/SegmentedList";
+import { TextInput, View, Text } from "react-native";
 import { useRouter } from "expo-router";
 import { globalTaskActor } from "../_layout";
-
-const dummyGroupNames: Option[] = [
-  { label: "other" },
-  { color: "#7bed9f", label: "food" },
-  { color: "#70a1ff", label: "errands" },
-];
+import GroupField from "./_components/GroupField";
+import { useSelector } from "@xstate/react";
+import AddTaskButton from "./_components/AddTaskButton";
+import TaskTextArea from "./_components/TaskTextArea";
+import { Group } from "../_machines/taskMachine";
 
 const CreateTodoModal = () => {
+  const groups = useSelector(globalTaskActor, (snapshot) => {
+    const groupTasks = snapshot.context.groupTasks;
+    const groupKeys = Object.keys(groupTasks);
+    return (groupKeys || []).map((groupKey) => ({
+      name: groupTasks[groupKey].name,
+      color: groupTasks[groupKey].color,
+    }));
+  });
   const router = useRouter();
-  const [selectedGroup, setSelectedGroup] = useState(dummyGroupNames[0].label);
-  const [taskDescription, setTaskDescription] = useState("");
+  const [selectedGroup, setSelectedGroup] = useState<Group>();
+  const [description, setDescription] = useState<string | undefined>();
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, gap: 32 }}>
       <View style={{ flexGrow: 1, maxHeight: 120 }}>
         <Text style={{ paddingTop: 16, fontSize: 24, textAlign: "center" }}>
           {"New Task"}
         </Text>
-        <TouchableOpacity
-          style={{
-            height: 50,
-            width: 50,
-            position: "absolute",
-            justifyContent: "center",
-            alignItems: "center",
-            top: 0,
-            right: 0,
-          }}
+        <AddTaskButton
           onPress={() => {
-            globalTaskActor.send({
-              type: "addTask",
-              task: { group: selectedGroup, description: taskDescription },
-            });
-            router.dismiss();
+            if (description !== undefined && selectedGroup !== undefined) {
+              globalTaskActor.send({
+                type: "addTask",
+                task: {
+                  group: selectedGroup,
+                  description,
+                },
+              });
+              router.dismiss();
+            }
           }}
-        >
-          <Text>{"Add"}</Text>
-        </TouchableOpacity>
+        />
       </View>
-      <SegmentedList
-        options={dummyGroupNames}
-        selected={selectedGroup}
-        onChange={(groupName) => {
-          setSelectedGroup(groupName);
-        }}
+      <GroupField
+        groups={groups}
+        forceCreate={!groups.length}
+        onSelect={setSelectedGroup}
       />
-      <TextInput
-        style={{
-          minHeight: 120,
-          padding: 16,
-          marginHorizontal: 16,
-          borderRadius: 16,
-          backgroundColor: "lightgrey",
-        }}
-        placeholder="Enter task"
-        multiline={true}
-        numberOfLines={4}
-        onChangeText={(text) => setTaskDescription(text)}
-        value={taskDescription}
+      <TaskTextArea
+        onChangeText={(text) => setDescription(text)}
+        value={description}
       />
     </View>
   );

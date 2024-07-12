@@ -5,19 +5,24 @@ export type Task = {
 };
 
 export type TodoGroup = {
-  title: string;
+  name: string;
   data: Task[];
-  color?: string;
+  color: string;
 };
 
 export type TaskContext = {
   groupTasks: Record<string, TodoGroup>;
 };
 
+export type Group = {
+  name: string;
+  color: string;
+};
+
 type TaskEvent = {
   type: "addTask";
   task: {
-    group: string;
+    group: Group;
     description: string;
   };
 };
@@ -33,10 +38,11 @@ const taskMachine = setup({
         const { group, description } = event?.task;
         return {
           ...context.groupTasks,
-          [group]: {
-            ...(context.groupTasks?.[group] || {}),
+          [group.name]: {
+            name: group.name,
+            color: group.color,
             data: [
-              ...(context.groupTasks?.[group]?.data || []),
+              ...(context.groupTasks?.[group.name]?.data || []),
               {
                 description,
               },
@@ -52,17 +58,18 @@ const taskMachine = setup({
   context: {
     groupTasks: {
       food: {
-        title: "food",
+        name: "food",
         data: [],
         color: "#7bed9f",
       },
       errands: {
-        title: "errands",
+        name: "errands",
         data: [],
         color: "#70a1ff",
       },
       other: {
-        title: "other",
+        name: "other",
+        color: "#0000004D",
         data: [{ description: "drink water" }],
       },
     },

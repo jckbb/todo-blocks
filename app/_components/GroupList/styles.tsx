@@ -34,6 +34,6 @@ export default StyleSheet.create({
     borderBottomLeftRadius: 16,
     paddingHorizontal: 16,
     height: 32,
-    marginBottom: 16,
+    marginBottom: 8,
   },
 });

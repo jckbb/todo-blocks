@@ -22,7 +22,7 @@ const Home = () => {
           ...groupSections,
           {
             ...group,
-            title: group.title,
+            name: group.name,
           },
         ];
       }

@@ -2,6 +2,7 @@ import { assign, setup } from "xstate";
 
 export type Task = {
   description: string;
+  done: boolean;
 };
 
 export type TodoGroup = {
@@ -19,13 +20,21 @@ export type Group = {
   color: string;
 };
 
-type TaskEvent = {
-  type: "addTask";
-  task: {
-    group: Group;
-    description: string;
-  };
-};
+type TaskEvent =
+  | {
+      type: "addTask";
+      task: {
+        group: Group;
+        description: string;
+      };
+    }
+  | {
+      type: "toggleTask";
+      value: {
+        taskIndex: number;
+        groupName: TodoGroup["name"];
+      };
+    };
 
 const taskMachine = setup({
   types: {
@@ -33,9 +42,35 @@ const taskMachine = setup({
     events: {} as TaskEvent,
   },
   actions: {
+    updateTask: assign({
+      groupTasks: ({ context, event }) => {
+        const {
+          value: { groupName, taskIndex },
+        } = event as {
+          type: "toggleTask";
+          value: {
+            taskIndex: number;
+            groupName: TodoGroup["name"];
+          };
+        };
+
+        let mutatedGroupTasks = { ...context.groupTasks };
+        mutatedGroupTasks[groupName].data[taskIndex].done =
+          !mutatedGroupTasks[groupName].data[taskIndex].done;
+        return mutatedGroupTasks;
+      },
+    }),
     createTask: assign({
       groupTasks: ({ context, event }) => {
-        const { group, description } = event?.task;
+        const {
+          task: { group, description },
+        } = event as {
+          type: "addTask";
+          task: {
+            group: Group;
+            description: string;
+          };
+        };
         return {
           ...context.groupTasks,
           [group.name]: {
@@ -45,6 +80,7 @@ const taskMachine = setup({
               ...(context.groupTasks?.[group.name]?.data || []),
               {
                 description,
+                done: false,
               },
             ],
           },
@@ -70,13 +106,16 @@ const taskMachine = setup({
       other: {
         name: "other",
         color: "#0000004D",
-        data: [{ description: "drink water" }],
+        data: [{ description: "drink water", done: false }],
       },
     },
   },
   on: {
     addTask: {
       actions: "createTask",
+    },
+    toggleTask: {
+      actions: "updateTask",
     },
   },
   states: {

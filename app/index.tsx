@@ -34,7 +34,13 @@ const Home = () => {
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <GroupList listHeader={renderListHeader} groups={groups} />
+      <GroupList
+        onToggleDoneTask={(value) =>
+          globalTaskActor.send({ type: "toggleTask", value })
+        }
+        listHeader={renderListHeader}
+        groups={groups}
+      />
     </SafeAreaView>
   );
 };

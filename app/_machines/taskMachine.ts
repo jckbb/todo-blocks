@@ -96,16 +96,16 @@ const taskMachine = setup({
       food: {
         name: "food",
         data: [],
-        color: "#7bed9f",
+        color: "#7bed9f99",
       },
       errands: {
         name: "errands",
         data: [],
-        color: "#70a1ff",
+        color: "#70a1ff99",
       },
       other: {
         name: "other",
-        color: "#0000004D",
+        color: "#0000001A",
         data: [{ description: "drink water", done: false }],
       },
     },

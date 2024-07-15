@@ -3,7 +3,7 @@ export default StyleSheet.create({
   segmentedList: {
     flexDirection: "row",
     gap: 8,
-    paddingVertical: 8,
+    height: 40,
     paddingLeft: 16,
   },
 });

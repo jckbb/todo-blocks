@@ -1,7 +1,7 @@
 import SegmentedList from "@/app/_components/SegmentedList";
 import { Group } from "@/app/_machines/taskMachine";
 import { useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import CreateGroup from "../CreateGroup";
 import styles from "./styles";
 
@@ -18,22 +18,22 @@ const GroupField = ({ groups, forceCreate, onSelect }: Props) => {
     <View style={{ minHeight: 100 }}>
       {forceCreate || groupMode === "create" ? (
         <View style={styles.container}>
-          <TouchableOpacity
-            style={styles.switchButton}
+          <Pressable
+            style={[styles.switchButton, styles.backButton]}
             onPress={() => setGroupMode("select")}
           >
-            <Text>{"<="}</Text>
-          </TouchableOpacity>
+            <Text>{"<"}</Text>
+          </Pressable>
           <CreateGroup onChange={(group) => onSelect(group)} />
         </View>
       ) : (
         <View style={styles.container}>
-          <TouchableOpacity
-            style={styles.switchButton}
+          <Pressable
+            style={[styles.switchButton, styles.addButton]}
             onPress={() => setGroupMode("create")}
           >
-            <Text>{"+"}</Text>
-          </TouchableOpacity>
+            <Text style={{ color: "white" }}>{"+"}</Text>
+          </Pressable>
           <SegmentedList
             options={groups}
             onChange={(group) => onSelect(group)}

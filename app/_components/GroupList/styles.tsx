@@ -6,6 +6,7 @@ export default StyleSheet.create({
   },
   groupSectionContent: {
     paddingHorizontal: 16,
+    paddingVertical: 32,
   },
   groupHeader: {
     backgroundColor: "#dfe6e9",
@@ -16,6 +17,12 @@ export default StyleSheet.create({
   itemDivider: {
     height: 8,
     backgroundColor: "#dfe6e9",
+  },
+  sectionTitle: {
+    fontSize: 18,
+    color: "#00000099",
+    fontWeight: "700",
+    textTransform: "capitalize",
   },
   itemStatus: {
     alignSelf: "flex-end",
@@ -39,7 +46,9 @@ export default StyleSheet.create({
     paddingBottom: 8,
   },
   taskDescription: {
-    textTransform: "capitalize",
+    fontSize: 18,
+    fontWeight: "500",
+    color: "#000000E6",
   },
   item: {
     backgroundColor: "#ffffffCC",

@@ -62,7 +62,7 @@ const GroupList = ({ groups, listHeader, onToggleDoneTask }: Props) => {
         color !== undefined && { backgroundColor: color },
       ]}
     >
-      <Text>{title}</Text>
+      <Text style={styles.sectionTitle}>{title}</Text>
     </View>
   );
 

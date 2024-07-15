@@ -37,7 +37,7 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Stack>
+      <Stack initialRouteName="index" screenOptions={{ headerShown: false }}>
         <Stack.Screen
           name="createTodoModal/index"
           options={{ headerShown: false, presentation: "modal" }}

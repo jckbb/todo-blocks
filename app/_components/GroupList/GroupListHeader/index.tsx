@@ -1,16 +1,29 @@
-import React from "react";
-import { View } from "react-native";
+import React, { useState } from "react";
+import { Pressable, Text, View } from "react-native";
 import { Link } from "expo-router";
 import styles from "./styles";
 
 const GroupListHeader = () => {
+  const [isPressed, setPressed] = useState(false);
+
+  const handlePressedIn = (pressed: boolean) => {
+    setPressed(pressed);
+  };
+
   return (
     <View style={styles.header}>
-      <View style={styles.navigateToTodoButton}>
-        <Link style={styles.navigateToTodoLink} href="/createTodoModal">
-          todo
-        </Link>
-      </View>
+      <Link href="/createTodoModal" asChild>
+        <Pressable
+          onPressIn={() => handlePressedIn(true)}
+          onPressOut={() => handlePressedIn(false)}
+        >
+          <View
+            style={[styles.navigateToTodoButton, isPressed && { opacity: 1 }]}
+          >
+            <Text style={styles.buttonLabel}>{"todo"}</Text>
+          </View>
+        </Pressable>
+      </Link>
     </View>
   );
 };

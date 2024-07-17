@@ -1,5 +1,9 @@
 import { assign, setup } from "xstate";
 
+export const initialContext = {
+  groupTasks: {},
+};
+
 export type Task = {
   description: string;
   done: boolean;
@@ -104,9 +108,7 @@ const taskMachine = setup({
 }).createMachine({
   id: "task",
   initial: "initialize",
-  context: {
-    groupTasks: {},
-  },
+  context: initialContext,
   on: {
     addTask: {
       actions: "createTask",

@@ -11,9 +11,8 @@ import "react-native-reanimated";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { createActor } from "xstate";
-import taskMachine from "./_machines/taskMachine";
+import taskMachine, { initialContext } from "./_machines/taskMachine";
 import { getData, storeData } from "@/storage";
-import { fetchDataFromAsyncStorage } from "./_utils/localStorage";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -33,14 +32,15 @@ export default function RootLayout() {
   });
 
   useLayoutEffect(() => {
+    // before render fetch data from AsyncStorage
     (async () => {
       await getData().then((value) => {
-        if (value) {
-          globalTaskActor.send({
-            type: "loadLocalData",
-            value: JSON.parse(value),
-          });
-        }
+        // dispatch data to initialize state machine
+        globalTaskActor.send({
+          type: "loadLocalData",
+          value:
+            value && value !== undefined ? JSON.parse(value) : initialContext,
+        });
       });
     })();
   }, []);

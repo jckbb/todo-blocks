@@ -1,12 +1,8 @@
 import React from "react";
-import {
-  View,
-  Text,
-  SectionList,
-  TouchableWithoutFeedback,
-} from "react-native";
+import { View, Text, SectionList } from "react-native";
 import styles from "./styles";
 import { Task, TodoGroup } from "@/app/_machines/taskMachine";
+import GroupItem from "./components/GroupItem";
 
 interface Props {
   groups: TodoGroup[];
@@ -21,34 +17,14 @@ interface Props {
 }
 
 const GroupList = ({ groups, listHeader, onToggleDoneTask }: Props) => {
-  const renderGroupItem = ({
-    item,
-    index,
-    section: { name, color },
-  }: {
-    item: Task;
-    index: number;
-    section: TodoGroup;
-  }) => (
-    <TouchableWithoutFeedback
-      onPress={() => {
-        onToggleDoneTask({ groupName: name, taskIndex: index });
+  const renderGroupItem = ({ item, index, section }) => (
+    <GroupItem
+      onDone={() => {
+        onToggleDoneTask({ groupName: section.name, taskIndex: index });
       }}
-    >
-      <View
-        style={[
-          styles.groupItem,
-          color !== undefined && { backgroundColor: color },
-        ]}
-      >
-        <View style={styles.item}>
-          <View style={styles.itemStatus}>
-            {item.done && <View style={styles.itemStatusDone} />}
-          </View>
-          <Text style={styles.taskDescription}>{item.description}</Text>
-        </View>
-      </View>
-    </TouchableWithoutFeedback>
+      item={item}
+      section={section}
+    />
   );
 
   const renderGroupHeader = ({

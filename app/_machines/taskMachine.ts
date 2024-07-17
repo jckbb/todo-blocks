@@ -34,6 +34,10 @@ type TaskEvent =
         taskIndex: number;
         groupName: TodoGroup["name"];
       };
+    }
+  | {
+      type: "loadLocalData";
+      value: TaskContext;
     };
 
 const taskMachine = setup({
@@ -42,6 +46,15 @@ const taskMachine = setup({
     events: {} as TaskEvent,
   },
   actions: {
+    initialize: assign({
+      groupTasks: ({ context, event }) => {
+        const { value } = event as {
+          type: "loadLocalData";
+          value: TaskContext;
+        };
+        return value?.groupTasks;
+      },
+    }),
     updateTask: assign({
       groupTasks: ({ context, event }) => {
         const {
@@ -90,25 +103,9 @@ const taskMachine = setup({
   },
 }).createMachine({
   id: "task",
-  initial: "idle",
+  initial: "initialize",
   context: {
-    groupTasks: {
-      food: {
-        name: "food",
-        data: [],
-        color: "#7bed9f99",
-      },
-      errands: {
-        name: "errands",
-        data: [],
-        color: "#70a1ff99",
-      },
-      other: {
-        name: "other",
-        color: "#0000001A",
-        data: [{ description: "drink water", done: false }],
-      },
-    },
+    groupTasks: {},
   },
   on: {
     addTask: {
@@ -119,6 +116,14 @@ const taskMachine = setup({
     },
   },
   states: {
+    initialize: {
+      on: {
+        loadLocalData: {
+          actions: "initialize",
+          target: "idle",
+        },
+      },
+    },
     idle: {},
   },
 });

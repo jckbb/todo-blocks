@@ -1,11 +1,11 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import GroupListHeader from "./_components/GroupList/GroupListHeader";
-import GroupList from "./_components/GroupList";
 import { useSelector } from "@xstate/react";
 import { globalTaskActor } from "./_layout";
 import { TodoGroup } from "./_machines/taskMachine";
+import GroupListHeader from "./_components/GroupList/components/GroupListHeader";
+import GroupList from "./_components/GroupList";
 
 const styles = StyleSheet.create({
   mainContainer: { flex: 1 },
